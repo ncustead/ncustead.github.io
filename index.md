@@ -39,8 +39,6 @@ I will document tools, progress and lessons learned in this space for future ref
 
 
 
--------------
-
 ## Start Here
 | # | Step | Description |
 | --- | --- | --- |
@@ -50,7 +48,7 @@ I will document tools, progress and lessons learned in this space for future ref
 
 -------------
 # 1 - Discover
-The trickiest part is enumeration. Don't get stuck in rabbit holes and try harder.
+Before you can follow my exploitation tips and tricks, you'll need to enumerate what's on the network.
 
 ## Automated OSCP Enumeration Script
 Use these automated tools to save as much time as possible when enumerating vulnerabilities!
