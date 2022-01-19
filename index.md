@@ -39,15 +39,6 @@ I will document tools, progress and lessons learned in this space for future ref
 
 
 
-# Offensive Security Ultimate Cheatsheet
-The goal of this repository is not to spoil the OSCP Exam, it's to save you as much time as possible when enumerating and exploiting potential low hanging fruit.  It's very easy to get caught up in the weeds of debugging and troubleshooting broken payloads only to lose out on all your time to pass the exam.
-
-You're on your own when the exploits start flying--I'll try to include potential tips and tricks you can try but it's up to you to fully understand the proper material before starting the exam. :)
-
--------------
-
-![Hacker](lol_hoody.jpg)
-
 -------------
 
 ## Start Here
@@ -59,7 +50,7 @@ You're on your own when the exploits start flying--I'll try to include potential
 
 -------------
 # 1 - Discover
-Before you can follow my exploitation tips and tricks, you'll need to enumerate what's on the network.
+The trickiest part is enumeration. Don't get stuck in rabbit holes and try harder.
 
 ## Automated OSCP Enumeration Script
 Use these automated tools to save as much time as possible when enumerating vulnerabilities!
