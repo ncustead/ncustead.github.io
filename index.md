@@ -3,26 +3,9 @@
 I will document tools, progress and lessons learned in this space for future reference. 
 
 ### Table of Contents
-[GitHub Pages](https://pages.github.com/)
+[Enumeration](https://pages.github.com/)
 ```markdown
-Syntax highlighted code block
 
-[Enumeration](http://google.com)
-[GitHub Pages](https://pages.github.com/)
-# Useful Commands Linux
-# Useful Commands Windows
-
-
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
 ```
 
 
