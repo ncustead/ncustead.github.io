@@ -7,7 +7,7 @@ I will document tools, progress and lessons learned in this space for future ref
 ```markdown
 Syntax highlighted code block
 
-[# Enumeration](google.com)
+[Enumeration](http://google.com)
 # Useful Commands Linux
 # Useful Commands Windows
 
