@@ -1,12 +1,10 @@
-## Welcome to GitHub Pages
+## Nick Custead OSCP Journey
 
-You can use the [editor on GitHub](https://github.com/ncustead/ncustead.github.io/edit/main/index.md) to maintain and preview the content for your website in Markdown files.
+I will document tools, progress and lessons learned in this space for future reference. 
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+### Table of Contents
 
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+Topics to be listed:
 
 ```markdown
 Syntax highlighted code block
