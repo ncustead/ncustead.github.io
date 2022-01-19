@@ -3,7 +3,7 @@
 I will document tools, progress and lessons learned in this space for future reference. 
 
 ### Table of Contents
-[Enumeration](https://ncustead.github.com/Enumeration)
+[Enumeration](https://ncustead.github.io/Enumeration)
 ```markdown
 
 ```
