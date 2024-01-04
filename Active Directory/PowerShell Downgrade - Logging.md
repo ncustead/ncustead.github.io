@@ -1,0 +1,5 @@
+- Get-host
+	- Views the host information for PowerShell
+- powershell.exe -version 2
+	- Downgrades to version 2 to prevent event logging
+		- The downgrade event will be logged however

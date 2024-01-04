@@ -1,0 +1,8 @@
+- To use this, we need both Bloodhound and Sharphound
+	- From AP, we need two things:
+		- sudo neo4j console, creds should be neo4j:neo4j. We can connect on the http://localhost port given. In another terminal, we run bloodhound
+		- bloodhound
+	- From Victim, we upload sharphound.ps1
+		- . .\SharpHound.ps1
+		- Invoke-Bloodhound -CollectionMethod All -Domain <TargetDomain> -ZipeFilename file.zip
+	- Look at File Transfer for Windows - Linux to look at upload techniques to bring back the file to the Kali AP.

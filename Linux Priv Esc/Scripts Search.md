@@ -1,0 +1,2 @@
+- The following one liner will search all scripts that may be worth investigating
+	- find / -type f -name "*.sh" 2>/dev/null | grep -v "src\|snap\|share"
