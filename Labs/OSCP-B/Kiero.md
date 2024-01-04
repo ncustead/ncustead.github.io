@@ -1,0 +1,14 @@
+![[Pasted image 20230828150918.png]]
+- This command showed password of kiero to default value, when in doubt try username:password combo. Login to FTP with kiero:kiero
+- There were RSA keys, which I grabbed to bring back to my AP
+- ![[Pasted image 20230828153529.png]]
+- This shows the syntax used to leverage the id_rsa key to log in
+- ssh john@IP -i "id_rsa" -p ssh_port
+- To root this machine, I simply just followed the Academy Page to 'root.'
+- Dirty Pipe works on everthing Kernel 8.0 and up, minus a few versions that it does not work
+- Check this by running 'uname -r'
+- ![[Pasted image 20230828155438.png]]
+- I simply curled the three components (compile.sh, exploit-1.c, exploit-2.c)
+- It's as simple as this. 
+- Second option is this route
+- ![[Pasted image 20230828155546.png]]

